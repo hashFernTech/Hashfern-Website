@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insights - Hashfern</title>
+<meta name="description" content="Practical notes on AI automation, agents, and workflow design for New Zealand small and mid-sized businesses, from the team at Hashfern." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://hashfern.co.nz/blog/index.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Hashfern" />
+<meta property="og:title" content="Insights - Hashfern" />
+<meta property="og:description" content="Practical notes on AI automation and workflow design for New Zealand SMEs." />
+<meta property="og:url" content="https://hashfern.co.nz/blog/index.html" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#090d0c; --surface:#0f1613; --fern:#4ce0a0; --fern-deep:#1f6e52;
+    --bone:#ecf4ef; --ash:#8fa69b; --line: rgba(236,244,239,0.09);
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--void); color:var(--bone); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 32px; }
+  h1,h2,h3{ font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em; margin:0; }
+  p{ color:var(--ash); line-height:1.65; margin:0; }
+  header{ padding:30px 0; border-bottom:1px solid var(--line); }
+  header nav{ display:flex; justify-content:space-between; align-items:center; max-width:900px; margin:0 auto; padding:0 32px; }
+  .back{ font-size:0.88rem; color:var(--ash); }
+  .back:hover{ color:var(--fern); }
+  .logo-text{ font-family:'Space Grotesk'; font-weight:600; }
+  .hero{ padding:80px 0 60px; }
+  .hero .label{ font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--fern); }
+  .hero h1{ font-size:clamp(2.2rem,5vw,3rem); margin-top:14px; line-height:1.1; }
+  .hero p{ margin-top:18px; max-width:56ch; font-size:1.05rem; }
+  .posts{ padding:20px 0 120px; display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .post-row{ background:var(--surface); padding:32px; display:flex; justify-content:space-between; gap:24px; align-items:flex-start; transition:background 0.25s ease; }
+  .post-row:hover{ background:#131b17; }
+  .post-row .meta{ font-family:'IBM Plex Mono'; font-size:0.72rem; color:var(--fern); margin-bottom:10px; }
+  .post-row h2{ font-size:1.3rem; margin-bottom:10px; }
+  .post-row p{ font-size:0.95rem; max-width:60ch; }
+  .post-row .arrow{ flex:none; color:var(--fern); font-family:'Space Grotesk'; font-size:1.2rem; }
+  @media (max-width:700px){ .post-row{ flex-direction:column; } }
+  footer{ border-top:1px solid var(--line); padding:32px; text-align:center; font-size:0.82rem; color:#5d6d66; }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="logo-text">Hashfern</a>
+    <a href="../index.html#contact" class="back">Get started &rarr;</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="label">Insights</span>
+    <h1>Notes on automation, written for the businesses running it</h1>
+    <p>No jargon, no hype cycle. Just what we've learned building AI workflows and agents for New Zealand SMEs.</p>
+  </div>
+</section>
+
+<section class="posts">
+  <div class="wrap" style="padding:0;">
+    <a class="post-row" href="where-to-start-automating.html">
+      <div>
+        <div class="meta">Getting started - 4 min read</div>
+        <h2>Where to start automating, if you've never done it before</h2>
+        <p>A simple way to find the one process worth automating first, before you touch any software.</p>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+    <a class="post-row" href="ai-agents-vs-chatbots.html">
+      <div>
+        <div class="meta">AI agents - 5 min read</div>
+        <h2>AI agents vs chatbots: what's actually different</h2>
+        <p>Why an agent that can take action is a different tool from a chatbot that can only answer questions.</p>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+    <a class="post-row" href="admin-costs-nz-smes.html">
+      <div>
+        <div class="meta">Operations - 4 min read</div>
+        <h2>The real cost of admin work in a small NZ business</h2>
+        <p>What manual admin actually costs a growing team, beyond the hours on the clock.</p>
+      </div>
+      <span class="arrow">&rarr;</span>
+    </a>
+  </div>
+</section>
+
+<footer>&copy; 2026 Hashfern. Auckland, New Zealand.</footer>
+
+</body>
+</html>
