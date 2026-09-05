@@ -573,8 +573,7 @@
     <button class="modal-close" id="formClose" aria-label="Close">&#10005;</button>
     <h3>Let's talk about your workflow</h3>
     <p class="modal-sub">Fill this in and it lands straight in our inbox. We reply within one business day.</p>
-    <form id="leadForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
-      <input type="hidden" name="_subject" value="Website submission - Hashfern" />
+    <form id="leadForm" action="mailto:services@hashfern.co.nz" method="POST" enctype="text/plain">
       <div class="field">
         <label for="f-name">Full name</label>
         <input type="text" id="f-name" name="name" required />
@@ -732,28 +731,23 @@
     formStatus.className = 'form-status show';
     formStatus.textContent = 'Sending...';
     const data = new FormData(leadForm);
-    try{
-      const res = await fetch(leadForm.action, {
-        method:'POST',
-        body:data,
-        headers:{ 'Accept':'application/json' }
-      });
-      if(res.ok){
-        formStatus.className = 'form-status show ok';
-        formStatus.textContent = "Thanks - that's landed in our inbox. We'll be in touch shortly.";
-        leadForm.reset();
-      } else {
-        throw new Error('Submission failed');
-      }
+    const name = (data.get('name') || '').trim();
+    const company = (data.get('company') || '').trim();
+    const need = (data.get('need') || '').trim();
+    const email = (data.get('email') || '').trim();
+    const phone = (data.get('phone') || '').trim();
+
+    const mailBody = `Full Name: ${name}%0ACompany: ${company}%0AEmail: ${email}%0APhone: ${phone}%0A%0AWhat do you need help automating?%0A${need}`;
+    const mailtoLink = `mailto:services@hashfern.co.nz?subject=Inquiries&body=${mailBody}`;
+
+    try {
+      window.location.href = mailtoLink;
+      formStatus.className = 'form-status show ok';
+      formStatus.textContent = "Thanks - that's landed in our inbox. We'll be in touch shortly.";
+      leadForm.reset();
     } catch(err){
       formStatus.className = 'form-status show err';
-      const name = encodeURIComponent(data.get('name')||'');
-      const company = encodeURIComponent(data.get('company')||'');
-      const need = encodeURIComponent(data.get('need')||'');
-      const email = encodeURIComponent(data.get('email')||'');
-      const phone = encodeURIComponent(data.get('phone')||'');
-      const mailBody = `Name: ${name}%0ACompany: ${company}%0AEmail: ${email}%0APhone: ${phone}%0A%0ANeed:%0A${need}`;
-      formStatus.innerHTML = `Couldn't auto-send. <a href="mailto:services@hashfern.co.nz?subject=Website%20submission%20-%20Hashfern&body=${mailBody}" style="color:var(--fern);text-decoration:underline;">Click here to email us directly</a> instead.`;
+      formStatus.innerHTML = `<a href="${mailtoLink}" style="color:var(--fern);text-decoration:underline;">Click here to email us directly</a> instead.`;
     }
   });
 </script>
