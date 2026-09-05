@@ -358,6 +358,16 @@
   .form-status.ok{ color:var(--fern); }
   .form-status.err{ color:#e8a15c; }
 
+  .toast{
+    position:fixed; bottom:32px; left:50%; transform:translate(-50%, 20px);
+    background:var(--surface); border:1px solid var(--fern-deep); color:var(--bone);
+    padding:16px 24px; border-radius:10px; font-size:0.92rem; z-index:400;
+    box-shadow:0 12px 34px -10px rgba(0,0,0,0.5);
+    opacity:0; pointer-events:none; transition:opacity 0.35s ease, transform 0.35s ease;
+    max-width:90vw; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+
   [data-reveal]{}
 
   @media (prefers-reduced-motion: reduce){
@@ -573,27 +583,30 @@
     <button class="modal-close" id="formClose" aria-label="Close">&#10005;</button>
     <h3>Let's talk about your workflow</h3>
     <p class="modal-sub">Fill this in and it lands straight in our inbox. We reply within one business day.</p>
-    <form id="leadForm" action="mailto:services@hashfern.co.nz" method="POST" enctype="text/plain">
+    <form id="leadForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+      <input type="hidden" name="_subject" id="formSubjectField" value="Website Leads" />
+      <input type="hidden" name="_replyto" id="formReplyToField" />
+      <input type="hidden" name="_format" value="plain" />
       <div class="field">
         <label for="f-name">Full name</label>
-        <input type="text" id="f-name" name="name" required />
+        <input type="text" id="f-name" name="Full Name" required />
       </div>
       <div class="field">
         <label for="f-company">Company name</label>
-        <input type="text" id="f-company" name="company" required />
+        <input type="text" id="f-company" name="Company Name" required />
       </div>
       <div class="field">
         <label for="f-need">What do you need help automating?</label>
-        <textarea id="f-need" name="need" required placeholder="A quick overview is fine, e.g. 'chasing quotes and invoices takes hours every week'"></textarea>
+        <textarea id="f-need" name="Overview of Need" required placeholder="A quick overview is fine, e.g. 'chasing quotes and invoices takes hours every week'"></textarea>
       </div>
       <div class="field-row">
         <div class="field">
           <label for="f-email">Email</label>
-          <input type="email" id="f-email" name="email" required />
+          <input type="email" id="f-email" name="Email" required />
         </div>
         <div class="field">
           <label for="f-phone">Phone (optional)</label>
-          <input type="tel" id="f-phone" name="phone" />
+          <input type="tel" id="f-phone" name="Phone" />
         </div>
       </div>
       <button type="submit" class="btn-primary form-submit">Send to Hashfern &rarr;</button>
@@ -601,6 +614,9 @@
     </form>
   </div>
 </div>
+
+<div class="toast" id="successToast">Thanks - that's landed in our inbox. We'll be in touch shortly.</div>
+
 
 <script>
   const header = document.getElementById('siteHeader');
@@ -730,26 +746,50 @@
     e.preventDefault();
     formStatus.className = 'form-status show';
     formStatus.textContent = 'Sending...';
+
+    const fullName = leadForm.querySelector('#f-name').value.trim();
+    const companyName = leadForm.querySelector('#f-company').value.trim();
+    const need = leadForm.querySelector('#f-need').value.trim();
+    const email = leadForm.querySelector('#f-email').value.trim();
+    const phone = leadForm.querySelector('#f-phone').value.trim();
+
+    // dynamic subject line + reply-to before sending
+    document.getElementById('formSubjectField').value = `Website Leads - ${fullName}`;
+    document.getElementById('formReplyToField').value = email;
+
     const data = new FormData(leadForm);
-    const name = (data.get('name') || '').trim();
-    const company = (data.get('company') || '').trim();
-    const need = (data.get('need') || '').trim();
-    const email = (data.get('email') || '').trim();
-    const phone = (data.get('phone') || '').trim();
 
-    const mailBody = `Full Name: ${name}%0ACompany: ${company}%0AEmail: ${email}%0APhone: ${phone}%0A%0AWhat do you need help automating?%0A${need}`;
-    const mailtoLink = `mailto:services@hashfern.co.nz?subject=Inquiries&body=${mailBody}`;
-
-    try {
-      window.location.href = mailtoLink;
-      formStatus.className = 'form-status show ok';
-      formStatus.textContent = "Thanks - that's landed in our inbox. We'll be in touch shortly.";
-      leadForm.reset();
+    try{
+      const res = await fetch(leadForm.action, {
+        method:'POST',
+        body:data,
+        headers:{ 'Accept':'application/json' }
+      });
+      if(res.ok){
+        leadForm.reset();
+        formStatus.className = 'form-status';
+        formStatus.textContent = '';
+        closeModal();
+        showToast("Thanks - that's landed in our inbox. We'll be in touch shortly.");
+      } else {
+        throw new Error('Submission failed');
+      }
     } catch(err){
       formStatus.className = 'form-status show err';
-      formStatus.innerHTML = `<a href="${mailtoLink}" style="color:var(--fern);text-decoration:underline;">Click here to email us directly</a> instead.`;
+      const mailBody = `Full Name: ${encodeURIComponent(fullName)}%0ACompany: ${encodeURIComponent(companyName)}%0AEmail: ${encodeURIComponent(email)}%0APhone: ${encodeURIComponent(phone)}%0A%0AWhat do you need help automating?%0A${encodeURIComponent(need)}`;
+      formStatus.innerHTML = `Couldn't auto-send. <a href="mailto:services@hashfern.co.nz?subject=Website%20Leads%20-%20${encodeURIComponent(fullName)}&body=${mailBody}" style="color:var(--fern);text-decoration:underline;">Click here to email us directly</a> instead.`;
     }
   });
+
+  // toast helper
+  const toastEl = document.getElementById('successToast');
+  let toastTimer = null;
+  function showToast(message){
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>{ toastEl.classList.remove('show'); }, 3000);
+  }
 </script>
 
 </body>
